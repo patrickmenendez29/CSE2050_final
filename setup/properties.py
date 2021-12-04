@@ -3,9 +3,9 @@ import pygame
 
 class GameProperties:
 
-    def __init__(self, cell_width=40, cell_height=40, rows=3, columns=8, gap=5, screen_size=(600, 600), caption=""):
-        self.cell_width = cell_width
-        self.cell_height = cell_height
+    def __init__(self, rows=3, columns=8, gap=5, screen_size=(600, 600), caption=""):
+        self.cell_width = (screen_size[0] / columns - gap)
+        self.cell_height = (screen_size[1] / rows - gap)
         self.rows = rows
         self.columns = columns
         self.gap = gap
