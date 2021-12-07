@@ -51,3 +51,19 @@ def get_solution(board, col):
             board[i][col] = 0
 
     return False
+
+
+if __name__ == '__main__':
+
+    board = [
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+    ]
+    get_solution(board, 0)
+
+    for row in board:
+        print(row)

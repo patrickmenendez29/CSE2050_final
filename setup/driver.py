@@ -54,12 +54,12 @@ class GameDriver:
         pygame.quit()
 
     def draw_grid(self):
-        n = 0
+        n = 1
         for row in range(self.grid_size):
 
             for column in range(self.grid_size):
 
-                if n % 2 == 0:
+                if n == 1:
                     color = colors.WHITE
                 else:
                     color = colors.BLACK
@@ -73,10 +73,13 @@ class GameDriver:
                 new_cell = Cell(start_x, start_y, self.width, self.height)
                 self.grid.insert_cell(new_cell, row, column)
 
-                n += 1
-            n += 1
+                n *= -1
+            if self.grid_size % 2 == 0:
+                n *= -1
 
     def update_ui(self):
+        if self.game_is_won:
+            print("Congratulations, you win!")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit(0)
@@ -91,11 +94,11 @@ class GameDriver:
             board = self.grid.get_board()
 
             if is_cell_valid(board, x, y):
-                self._handle_successful_queen(x, y)
+                self.handle_successful_queen(x, y)
             if self.queen_count == self.grid_size:
                 self.game_is_won = True
 
-    def _handle_successful_queen(self, x, y):
+    def handle_successful_queen(self, x, y):
         queen = Queen(self)
         queen.place_object(self.grid.cells[x][y].get_center())
         self.grid.cells[x][y].toggle()
