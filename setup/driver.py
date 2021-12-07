@@ -89,9 +89,7 @@ class GameDriver:
             pos = pygame.mouse.get_pos()
             x, y = self.grid.get_cell_position(pos[0], pos[1])
             board = self.grid.get_board()
-            for row in board:
-                print(row)
-            print()
+
             if is_cell_valid(board, x, y):
                 self._handle_successful_queen(x, y)
             if self.queen_count == self.grid_size:

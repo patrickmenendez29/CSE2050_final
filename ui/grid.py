@@ -48,7 +48,6 @@ class Grid:
         cell.row = x
         cell.col = y
         self.cells[x][y] = cell
-        print([cell.x_pos, cell.y_pos])
 
     def get_cell_position(self, x, y):
         for row in self.cells:
