@@ -3,7 +3,7 @@ import pygame
 
 class GameProperties:
 
-    def __init__(self, rows=3, columns=8, gap=5, screen_size=(600, 600), caption=""):
+    def __init__(self, rows=3, columns=8, gap=5, screen_size=(600, 600), caption="pygame"):
         self.cell_width = (screen_size[0] / columns - gap)
         self.cell_height = (screen_size[1] / rows - gap)
         self.rows = rows

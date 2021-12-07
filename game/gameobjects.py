@@ -15,3 +15,4 @@ class Bug:
         image_rect = self.sprite.get_rect()
         image_rect.center = (x, y)
         self.properties.screen.blit(self.sprite, image_rect)
+
