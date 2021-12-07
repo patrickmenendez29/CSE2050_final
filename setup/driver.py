@@ -1,6 +1,7 @@
 import pygame
 from setup.properties import GameProperties, GridProperties
 from constants import colors
+from ui.grid import Grid, Cell
 
 
 class GameDriver:
@@ -19,6 +20,8 @@ class GameDriver:
         self.width = self.screen_size[0] / grid_size - gap
         self.height = self.screen_size[1] / grid_size - gap
         self.screen = None
+        self.grid = Grid(self.grid_size)
+
         pass
 
     def classic(self):
@@ -52,11 +55,16 @@ class GameDriver:
                     color = colors.WHITE
                 else:
                     color = colors.BLACK
+
                 # Draw a rectangle as [start_x, start_y, width, height]
                 # or [surface, color, [start_x, start_y, width, height]]
-                pygame.draw.rect(self.screen, color, [self.width * column +
-                                                      self.gap, (self.gap + self.height) * row + self.gap, self.width,
+                start_x = self.width * column + self.gap
+                start_y = (self.gap + self.height) * row + self.gap
+                pygame.draw.rect(self.screen, color, [start_x, start_y , self.width,
                                                       self.height])
+                new_cell = Cell(start_y, start_y, self.width, self.height)
+                self.grid.insert_cell(new_cell, row, column)
+
                 n += 1
             n += 1
 
@@ -68,4 +76,5 @@ class GameDriver:
                 left, middle, right = pygame.mouse.get_pressed()
                 if left:
                     pos = pygame.mouse.get_pos()
-                    print(pos)
+                    index = self.grid.get_cell_position(pos[0], pos[1])
+                    print(index)
