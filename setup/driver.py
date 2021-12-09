@@ -2,6 +2,7 @@ import pygame
 from setup.properties import GameProperties, GridProperties
 from constants import colors
 from ui.grid import Grid, Cell
+from ui.menu import Menu
 from game.gameobjects import Queen
 from algorithms.nqueens import is_cell_valid, get_solution
 
@@ -14,18 +15,21 @@ class GameDriver:
         self.properties = properties
         self.grid_properties = GridProperties(self.properties)
         self.run = True
-        self.screen_size = (500, 500)
+        self.offset = 100
+        self.screen_size = (500, 500 + self.offset)
         self.grid_size = grid_size
         self.gap = gap
 
         # Set the width and height of the screen [width, height]
         self.width = self.screen_size[0] / grid_size - gap
-        self.height = self.screen_size[1] / grid_size - gap
+        self.height = (self.screen_size[1] - self.offset)  / grid_size - gap
         self.screen = None
         self.grid = Grid(self.grid_size)
         self.game_objects = []
         self.queen_count = 0
         self.game_is_won = False
+
+        self.game_menu = Menu()
         pass
 
     def _load_game(self):
@@ -33,9 +37,15 @@ class GameDriver:
 
         self.screen = pygame.display.set_mode(self.screen_size)
         self.screen.fill(colors.BLACK)
+        fill_start = (0, 0), (1, 0)
+        fill_end = (0, 1), (1, 1)
+        self.background = pygame.draw.rect(self.screen, colors.BLACK, [0, 0, self.screen_size[0],
+                                                      self.offset])
+        self.gradient_rect(self.screen, colors.WHITE, colors.BLACK, self.background, fill_start, fill_end)
         self.draw_grid()
+        #self.game_menu.display_menu()
 
-    def classic(self):
+    def start(self):
         self._load_game()
 
         while self.run:
@@ -67,7 +77,7 @@ class GameDriver:
                 # Draw a rectangle as [start_x, start_y, width, height]
                 # or [surface, color, [start_x, start_y, width, height]]
                 start_x = self.width * column + self.gap
-                start_y = (self.gap + self.height) * row + self.gap
+                start_y = ((self.gap + self.height) * row + self.gap) + self.offset
                 pygame.draw.rect(self.screen, color, [start_x, start_y, self.width,
                                                       self.height])
                 new_cell = Cell(start_x, start_y, self.width, self.height)
@@ -85,6 +95,7 @@ class GameDriver:
                 exit(0)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self._handle_click()
+            #self.game_menu.react(event)
 
     def _handle_click(self):
         left, middle, right = pygame.mouse.get_pressed()
@@ -103,3 +114,13 @@ class GameDriver:
         queen.place_object(self.grid.cells[x][y].get_center())
         self.grid.cells[x][y].toggle()
         self.queen_count += 1
+
+    def gradient_rect(self, screen, color1, color2, target_rect, fill_start, fill_end):
+        """ Draw a gradient filled rectangle covering target_rect """
+
+        bitmap = pygame.Surface((2, 2))  # a 2x2 bitmap
+        # a line requires x1, y1, x2, y2
+        pygame.draw.line(bitmap, color1, *fill_start)  # start color line.
+        pygame.draw.line(bitmap, color2, *fill_end)  # end color line
+        color_rect = pygame.transform.smoothscale(bitmap, (target_rect.width, target_rect.height))  # stretch!
+        screen.blit(color_rect, target_rect)
