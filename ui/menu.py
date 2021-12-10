@@ -1,8 +1,13 @@
 import thorpy
 import pygame
+from setup.driver import GameDriver
 
 class Menu:
-    def __init__(self):
+
+    def __init__(self, driver: GameDriver):
+        self.driver = driver
+        application = thorpy.Application(size=driver.screen_size)
+
         pass
 
     def display_menu(self):
@@ -27,19 +32,23 @@ class Menu:
         self._menu.react(event)
 
     def process_input(self):
-        player_name = self._input_field.get_value().title()
-        if len(player_name) > 0:
-            thorpy.launch_blocking_alert(title=f"Welcome {player_name}!",
+        if self._input_field.get_value().title().isnumeric():
+            grid_size = int(self._input_field.get_value().title())
+        else:
+
+            thorpy.launch_blocking_alert(title="Value Error",
             text="This is the land of The Champions!\n"
             "Are you ready to take on the lord of Omicron,\n"
             "defeat him and save Planet Earth?",
             parent=self._background
             ) # for auto-unblitting)
+            return 
         self._box.remove_all_elements()
         self._box.unblit()
         self._box.update()
         self._menu.refresh()
 
         pygame.display.update()
+        self.driver.start(grid_size)
 
 

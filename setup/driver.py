@@ -2,7 +2,6 @@ import pygame
 from setup.properties import GameProperties, GridProperties
 from constants import colors
 from ui.grid import Grid, Cell
-from ui.menu import Menu
 from game.gameobjects import Queen
 from algorithms.nqueens import is_cell_valid, get_solution
 
@@ -20,21 +19,22 @@ class GameDriver:
         self.grid_size = grid_size
         self.gap = gap
 
-        # Set the width and height of the screen [width, height]
-        self.width = self.screen_size[0] / grid_size - gap
-        self.height = (self.screen_size[1] - self.offset)  / grid_size - gap
+
         self.screen = None
-        self.grid = Grid(self.grid_size)
+        self.grid = None
         self.game_objects = []
         self.queen_count = 0
         self.game_is_won = False
 
-        self.game_menu = Menu()
         pass
 
-    def _load_game(self):
+    def _load_game(self, n):
         pygame.init()
-
+        self.grid_size = n
+        self.grid = Grid(self.grid_size)
+        # Set the width and height of the screen [width, height]
+        self.width = self.screen_size[0] / self.grid_size - self.gap
+        self.height = (self.screen_size[1] - self.offset) / self.grid_size - self.gap
         self.screen = pygame.display.set_mode(self.screen_size)
         self.screen.fill(colors.BLACK)
         fill_start = (0, 0), (1, 0)
@@ -45,9 +45,9 @@ class GameDriver:
         self.draw_grid()
         #self.game_menu.display_menu()
 
-    def start(self):
-        self._load_game()
-
+    def start(self, n):
+        self.grid_size = n
+        self._load_game(n)
         while self.run:
             self.update_ui()
 
@@ -95,12 +95,13 @@ class GameDriver:
                 exit(0)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self._handle_click()
-            #self.game_menu.react(event)
 
     def _handle_click(self):
         left, middle, right = pygame.mouse.get_pressed()
         if left:
             pos = pygame.mouse.get_pos()
+            if pos[1] < self.offset:
+                return
             x, y = self.grid.get_cell_position(pos[0], pos[1])
             board = self.grid.get_board()
 
