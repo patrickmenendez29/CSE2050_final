@@ -18,6 +18,8 @@ class GameObject:
         image_rect.center = (x, y)
         self.parent.screen.blit(self.sprite, image_rect)
 
+    def unblit(self):
+        self.parent.screen.unblit(self.sprite)
 
 class Queen(GameObject):
 

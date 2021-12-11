@@ -7,15 +7,15 @@ class Menu:
     def __init__(self, driver: GameDriver):
         self.driver = driver
         application = thorpy.Application(size=driver.screen_size)
-
+        driver.parent = self
         pass
 
     def display_menu(self):
         thorpy.set_theme("human")
-        button = thorpy.make_button("Quit", func=thorpy.functions.quit_func)
-        self._input_field = thorpy.Inserter(name="Enter your name: ", value="")
-        submit_button = thorpy.make_button("Submit", func=self.process_input)
-        group_box = thorpy.make_group(elements=[self._input_field, submit_button])
+        button = thorpy.make_button("Start Game", func=self.process_input)
+        self._input_field = thorpy.Inserter(name="Enter n: ", value="")
+
+        group_box = thorpy.make_group(elements=[self._input_field])
         box = thorpy.Box(elements=[group_box, button])
         self._box = box
         self._input_field.enter()  # set focus for typing
@@ -25,7 +25,9 @@ class Menu:
         box.update()
         thorpy.theme.set_default_theme_as_current()
         self._background = thorpy.Background(elements=[self._box], image="ui/chess.png")
+
         self._menu = thorpy.Menu(self._background)
+
         self._menu.play()
 
     def react(self, event):
@@ -37,9 +39,7 @@ class Menu:
         else:
 
             thorpy.launch_blocking_alert(title="Value Error",
-            text="This is the land of The Champions!\n"
-            "Are you ready to take on the lord of Omicron,\n"
-            "defeat him and save Planet Earth?",
+            text="Please enter a valid, positive integer to start the game (0-99)",
             parent=self._background
             ) # for auto-unblitting)
             return 
@@ -50,5 +50,6 @@ class Menu:
 
         pygame.display.update()
         self.driver.start(grid_size)
+        self._menu.play()
 
 

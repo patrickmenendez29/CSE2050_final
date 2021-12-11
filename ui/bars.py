@@ -10,7 +10,7 @@ class StatusBar:
         self.solve_button = None
         self.help_button = None
 
-    def display_menu(self):
+    def get_status_bar(self):
         self.restart_button = thorpy.make_button("Restart", func=self._restart)
         self.quit_button = thorpy.make_button("Quit", func=self._quit)
         self.solve_button = thorpy.make_button("Solve", func=self._solve)
@@ -21,6 +21,9 @@ class StatusBar:
             self.solve_button,
             self.help_button
         ])
+
+        self.status_bar = group_box
+
 
     def _quit(self):
         pass

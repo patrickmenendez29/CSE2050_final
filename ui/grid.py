@@ -10,6 +10,8 @@ class Cell:
         self.row = None
         self.col = None
 
+
+
     def get_center(self):
         x = self.x_pos + (self.width / 2)
         y = self.y_pos + (self.height / 2)
@@ -17,6 +19,9 @@ class Cell:
 
     def toggle(self):
         self.value = 1
+
+    def reset(self):
+        self.value = 0
 
     def __str__(self):
         return self.value
@@ -36,6 +41,7 @@ class Grid:
         self.fill_grid()
         self.row_ranges = []
         self.col_ranges = []
+        self.board = None
 
     def fill_grid(self):
         for _ in range(self.n):
@@ -48,6 +54,11 @@ class Grid:
         cell.row = x
         cell.col = y
         self.cells[x][y] = cell
+
+    def reset(self):
+        for rows in self.cells:
+            for cell in rows:
+                cell.reset()
 
     def get_cell_position(self, x, y):
         for row in self.cells:
