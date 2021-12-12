@@ -2,14 +2,18 @@ import thorpy
 import pygame
 from setup.driver import GameDriver
 
+
+# @desc:
 class Menu:
 
     def __init__(self, driver: GameDriver):
         self.driver = driver
-        application = thorpy.Application(size=driver.screen_size)
         driver.parent = self
         pass
 
+    # @desc:
+    # @params:
+    # @returns:
     def display_menu(self):
         thorpy.set_theme("human")
         button = thorpy.make_button("Start Game", func=self.process_input)
@@ -30,9 +34,15 @@ class Menu:
 
         self._menu.play()
 
+    # @desc:
+    # @params:
+    # @returns:
     def react(self, event):
         self._menu.react(event)
 
+    # @desc:
+    # @params:
+    # @returns:
     def process_input(self):
         if self._input_field.get_value().title().isnumeric():
             grid_size = int(self._input_field.get_value().title())
